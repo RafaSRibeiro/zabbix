@@ -7,6 +7,7 @@ services:
       POSTGRES_PASSWORD: postgres
 
   zabbix-server:
+    container_name: zabbix-server
     image: zabbix/zabbix-server-pgsql
     environment:
       DB_SERVER_HOST: postgres
@@ -14,11 +15,12 @@ services:
       POSTGRES_PASSWORD: postgres
 
   zabbix-agent:
+    container_name: zabbix-agent
     image: zabbix/zabbix-agent
     environment:
       ZBX_SERVER_HOST: zabbix-server
-      ZBX_HOSTNAME: zabbix-server
-    links:
+      ZBX_HOSTNAME: zabbix-agent
+    depends_on:
       - zabbix-server
 
   zabbix-client:
