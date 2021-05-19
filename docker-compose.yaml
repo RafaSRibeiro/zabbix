@@ -8,23 +8,15 @@ services:
 
   zabbix-server:
     container_name: zabbix-server
-    image: zabbix/zabbix-server-pgsql
+    image: zabbix/zabbix-server-pgsql:alpine-latest
     environment:
       DB_SERVER_HOST: postgres
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
 
-  zabbix-agent:
-    container_name: zabbix-agent
-    image: zabbix/zabbix-agent
-    environment:
-      ZBX_SERVER_HOST: zabbix-server
-      ZBX_HOSTNAME: zabbix-agent
-    depends_on:
-      - zabbix-server
-
   zabbix-client:
-    image: zabbix/zabbix-web-nginx-pgsql
+    container_name: zabbix-client
+    image: zabbix/zabbix-web-nginx-pgsql:alpine-latest
     environment:
       PHP_TZ: "America/Sao_Paulo"
       ZBX_SERVER_HOST: zabbix-server
@@ -36,3 +28,25 @@ services:
       - postgres
     ports:
       - 8080:8080
+
+  linux01:
+    container_name: linux01
+    image: zabbix/zabbix-agent:alpine-latest
+    environment:
+      ZBX_SERVER_HOST: zabbix-server
+      ZBX_HOSTNAME: linux01
+    depends_on:
+      - zabbix-server
+
+  linux02:
+    container_name: linux02
+    image: zabbix/zabbix-agent:alpine-latest
+    environment:
+      ZBX_SERVER_HOST: zabbix-server
+      ZBX_HOSTNAME: linux02
+    depends_on:
+      - zabbix-server
+
+  linux03-snmp:
+    container_name: linux03-snmp
+    image: tandrup/snmpsim
