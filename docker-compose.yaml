@@ -53,6 +53,19 @@ services:
     depends_on:
       - zabbix-server
 
+  linux05:
+    container_name: linux05
+    image: zabbix/zabbix-agent:alpine-latest
+    environment:
+      ZBX_SERVER_HOST: zabbix-server
+      ZBX_HOSTNAME: linux02
+    depends_on:
+      - zabbix-server
+
   linux03-snmp:
     container_name: linux03-snmp
+    image: tandrup/snmpsim
+
+  linux04-snmp:
+    container_name: linux04-snmp
     image: tandrup/snmpsim
